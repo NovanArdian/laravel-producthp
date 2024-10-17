@@ -2,6 +2,7 @@
  
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\ProductController;
  
 Route::get('/', function () {
@@ -42,5 +43,18 @@ Route::middleware('auth')->group(function () {
 // khusus untuk route update profile
 
 use App\Http\Controllers\ProfileController;
-
 Route::post('/profile/update', [ProfileController::class, 'update'])->name('profile.update');
+
+
+// khusus untuk route CRUD karyawa
+
+Route::prefix('kelola-karyawan')->name('kelola_karyawan.')->group(function () {
+    Route::get('/', [EmployeeController::class, 'index'])->name('data');   // Display all users
+    Route::get('/tambah', [EmployeeController::class, 'create'])->name('tambah');  // Show create form
+    Route::post('/tambah/proses', [EmployeeController::class, 'store'])->name('tambah.proses');  // Process creation
+    Route::get('/ubah/{id}', [EmployeeController::class, 'edit'])->name('ubah');   // Show edit form
+    Route::patch('/ubah/{id}/proses', [EmployeeController::class, 'update'])->name('ubah.proses');  // Process update
+    Route::delete('/hapus/{id}', [EmployeeController::class, 'destroy'])->name('hapus');  // Process deletion
+});
+
+
