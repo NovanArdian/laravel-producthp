@@ -5,6 +5,8 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\ProductController;
  
+use App\Http\Controllers\StokController;
+ 
 Route::get('/', function () {
     return view('welcome');
 });
@@ -57,4 +59,13 @@ Route::prefix('kelola-karyawan')->name('kelola_karyawan.')->group(function () {
     Route::delete('/hapus/{id}', [EmployeeController::class, 'destroy'])->name('hapus');  // Process deletion
 });
 
+// crud khusus stok
+Route::prefix('kelola-stok')->name('kelola_stok.')->group(function () {
+    Route::get('/', [StokController::class, 'index'])->name('data');   // Display all users
+    Route::get('/tambah', [StokController::class, 'create'])->name('tambah');  // Show create form
+    Route::post('/tambah/proses', [StokController::class, 'store'])->name('tambah.proses');  // Process creation
+    Route::get('/ubah/{id}', [StokController::class, 'edit'])->name('ubah');   // Show edit form
+    Route::patch('/ubah/{id}/proses', [StokController::class, 'update'])->name('ubah.proses');  // Process update
+    Route::delete('/hapus/{id}', [StokController::class, 'destroy'])->name('hapus');  // Process deletion
+});
 
