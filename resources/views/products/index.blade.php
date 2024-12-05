@@ -5,7 +5,10 @@
 @section('contents')
     <div class="d-flex align-items-center justify-content-between">
         <h1 class="mb-0">Daftar Handphone</h1>
-        <a href="{{ route('products.create') }}" class="btn btn-primary">Tambah Product</a>
+        <div>
+            <a href="{{ route('products.create') }}" class="btn btn-primary">Tambah Product</a>
+            <a href="{{ route('products.export') }}" class="btn btn-success">Export to Excel</a> <!-- Tombol Export -->
+        </div>
     </div>
     <hr />
     @if(Session::has('success'))
@@ -13,7 +16,7 @@
             {{ Session::get('success') }}
         </div>
     @endif
-    <table class="table table-hover">
+    <table class="table table-ho ver">
         <thead class="table-primary">
             <tr>
                 <th>No</th>
@@ -24,7 +27,7 @@
                 <th>Action</th>
             </tr>
         </thead>
-        <tbody>+
+        <tbody>
             @if($product->count() > 0)
                 @foreach($product as $rs)
                     <tr>
@@ -41,6 +44,7 @@
                                     @csrf
                                     @method('DELETE')
                                     <button class="btn btn-danger m-0">Hapus</button>
+                                    <a href="{{ route('products.invoice', $rs->id) }}" class="btn btn-info">Cetak Struk</a>
                                 </form>
                             </div>
                         </td>
@@ -48,7 +52,7 @@
                 @endforeach
             @else
                 <tr>
-                    <td class="text-center" colspan="5">Belum ada produk</td>
+                    <td class="text-center" colspan="6">Belum ada produk</td>
                 </tr>
             @endif
         </tbody>

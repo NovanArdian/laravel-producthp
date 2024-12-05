@@ -4,9 +4,18 @@ namespace App\Http\Controllers;
   
 use Illuminate\Http\Request;
 use App\Models\Product;
- 
+use PDF;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\ProductsExport;
+
+
+
 class ProductController extends Controller
 {
+    public function export()
+{
+    return Excel::download(new ProductsExport, 'products.xlsx');
+}
     /**
      * Display a listing of the resource.
      */
@@ -80,4 +89,23 @@ class ProductController extends Controller
   
         return redirect()->route('products')->with('success', 'product deleted successfully');
     }
+
+    public function generateInvoice($id)
+{
+    $product = Product::findOrFail($id);
+
+    // Data yang akan digunakan di PDF
+    $data = [
+        'title' => $product->title,
+        'price' => $product->price,
+        'product_code' => $product->product_code,
+        'description' => $product->description,
+    ];
+
+    // Membuat PDF
+    $pdf = Pdf::loadView('products.invoice', $data);
+
+    // Unduh PDF
+    return $pdf->download('invoice-' . $product->id . '.pdf');
+}
 }

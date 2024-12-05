@@ -7,9 +7,9 @@
   <!-- Welcome Section -->
   <div class="row justify-content-center mb-4">
     <div class="col-md-8">
-      <div class="alert alert-primary shadow-sm rounded-lg text-center py-4">
-        <h4 class="alert-heading font-weight-bold">Selamat Datang di NovanShop!</h4>
-        <p class="lead">Anda berhasil login. Yowww yang jauh mendekat, yang dekat merapattt!</p>
+      <div class="bg-success shadow-sm rounded-lg text-center py-4">
+        <h4 class="text-white font-weight-bold">Selamat Datang {{ Auth::user()->name }}</h4>
+        <p class="lead text-white">Jangan lupa order sekarang juga di NovanShop</p>
       </div>
     </div>
   </div>
