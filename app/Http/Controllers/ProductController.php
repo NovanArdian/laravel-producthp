@@ -7,6 +7,9 @@ use App\Models\Product;
 use PDF;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\ProductsExport;
+use Illuminate\Support\Facades\Auth;
+
+
 
 
 
@@ -22,10 +25,11 @@ class ProductController extends Controller
     public function index()
     {
         // Ambil data product terbaru
-        $product = Product::orderBy('created_at', 'DESC')->get();
+        $products = Product::where('user_id', Auth::id())
+        ->orderBy('created_at', 'DESC')
+        ->get();
 
-        // Kirim ke view
-        return view('products.index', compact('product'));
+    return view('products.index', compact('products'));
     }
   
     /**
@@ -41,8 +45,11 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-        Product::create($request->all());
- 
+        Product::create(array_merge(
+            $request->all(),
+            ['user_id' => Auth::id()]
+        ));
+    
         return redirect()->route('products')->with('success', 'Product added successfully');
     }
   
@@ -71,11 +78,13 @@ class ProductController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        $product = Product::findOrFail($id);
-  
-        $product->update($request->all());
-  
-        return redirect()->route('products')->with('success', 'product updated successfully');
+        $product = Product::where('id', $id)
+        ->where('user_id', Auth::id())
+        ->firstOrFail();
+
+    $product->update($request->all());
+
+    return redirect()->route('products')->with('success', 'Product updated successfully');
     }
   
     /**
@@ -83,11 +92,13 @@ class ProductController extends Controller
      */
     public function destroy(string $id)
     {
-        $product = Product::findOrFail($id);
-  
-        $product->delete();
-  
-        return redirect()->route('products')->with('success', 'product deleted successfully');
+        $product = Product::where('id', $id)
+        ->where('user_id', Auth::id())
+        ->firstOrFail();
+
+    $product->delete();
+
+    return redirect()->route('products')->with('success', 'Product deleted successfully');
     }
 
     public function generateInvoice($id)
@@ -103,6 +114,8 @@ class ProductController extends Controller
     ];
 
     // Membuat PDF
+ 
+    
     $pdf = Pdf::loadView('products.invoice', $data);
 
     // Unduh PDF

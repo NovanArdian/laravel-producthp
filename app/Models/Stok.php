@@ -9,6 +9,12 @@ class Stok extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['nama', 'seri', 'ram', 'stok'];
+    protected $fillable = ['nama', 'seri', 'ram', 'stok', 'user_id'];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }
+
 
