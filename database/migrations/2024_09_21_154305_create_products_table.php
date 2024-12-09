@@ -10,6 +10,8 @@ return new class extends Migration
     {
         Schema::create('products', function (Blueprint $table) {
             $table->id();
+            // tambahkan untuk user id
+            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->string('title');
             $table->decimal('price', 10, 2); // Decimal untuk menyimpan angka dengan desimal
             $table->string('product_code');
